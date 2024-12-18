@@ -1,36 +1,16 @@
 "use client";
 import { Box, Button, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Product } from "@/components/types/typeProduct";
 import ProductInfo from "./ProductInfo";
 import Reviews from "./AllReviews";
-import Loader from "@/components/Loader";
-import Error from "@/components/Error";
 import { useRouter } from "next/navigation";
 
-export default function DetailsPage({ id }: { id: string }) {
+export default function DetailsPage({ product }: { product: Product }) {
   const router = useRouter();
-
-  const {
-    data: product,
-    isLoading,
-    isError,
-  } = useQuery<Product>({
-    queryKey: ["product", Number(id)],
-    queryFn: async () => {
-      const response = await axios.get(`https://dummyjson.com/products/${id}`);
-      return response.data;
-    },
-  });
 
   const handleClick = () => {
     router.push(`/`);
   };
-
-  if (id === undefined) return <Error>Could not find this item</Error>;
-  if (isLoading) return <Loader />;
-  if (!product || isError) return <Error>Could not find this item</Error>;
 
   return (
     <Box
